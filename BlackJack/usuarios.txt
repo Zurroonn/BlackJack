@@ -1,0 +1,3 @@
+admin,admin,500
+ana,gordita,200
+zurri,0000,100
