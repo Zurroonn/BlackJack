@@ -1,4 +1,4 @@
-package blackjack;
+package Arcade.BlackJack;
 
 import java.util.ArrayList;
 import java.util.Collections;

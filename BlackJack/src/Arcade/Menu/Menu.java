@@ -2,18 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package probandopopupmenu;
+package Arcade.Menu;
 
 /**
  *
  * @author aazur
  */
-public class gewqrg extends javax.swing.JFrame {
+public class Menu extends javax.swing.JFrame {
 
     /**
-     * Creates new form gewqrg
+     * Creates new form Menu
      */
-    public gewqrg() {
+    public Menu() {
         initComponents();
     }
 
@@ -26,58 +26,31 @@ public class gewqrg extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        menu = new javax.swing.JPopupMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        JTable1 = new javax.swing.JTable();
-
-        jMenuItem1.setText("jMenuItem1");
-        menu.add(jMenuItem1);
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        JTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {"dd", "d", null, null},
-                {"d", "d", "d", "d"},
-                {null, "dd", null, null},
-                {"d", null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        JTable1.setComponentPopupMenu(menu);
-        JTable1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                JTable1MousePressed(evt);
-            }
-        });
-        jScrollPane1.setViewportView(JTable1);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Arcade/Menu/HD-wallpaper-vr-q-a-with-doc-mack-of-the-galloping-ghost-arcade-arcade-room-thumbnail.jpg"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(19, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(151, 151, 151)
+                .addComponent(jLabel1)
+                .addContainerGap(254, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addGap(101, 101, 101)
+                .addComponent(jLabel1)
+                .addContainerGap(258, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void JTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTable1MousePressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_JTable1MousePressed
 
     /**
      * @param args the command line arguments
@@ -96,28 +69,25 @@ public class gewqrg extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(gewqrg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(gewqrg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(gewqrg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(gewqrg.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Menu.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new gewqrg().setVisible(true);
+                new Menu().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable JTable1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JPopupMenu menu;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

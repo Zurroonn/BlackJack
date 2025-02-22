@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package blackjack;
+package Arcade.BlackJack;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
  *
  * @author aazur
  */
-public class WhiteJack extends javax.swing.JFrame {
+public class Blackjack extends javax.swing.JFrame {
     private static final String ARCHIVO_USUARIOS = "usuarios.txt";
     private static int dinerousuario=0;
 
@@ -37,7 +37,7 @@ public class WhiteJack extends javax.swing.JFrame {
     /**
      * Creates new form WhiteJack
      */
-    public WhiteJack() {
+    public Blackjack() {
         initComponents();
 
     }
@@ -207,7 +207,7 @@ public class WhiteJack extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(0, 204, 0));
 
-        mazo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/Different-BikeBack.png"))); // NOI18N
+        mazo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Arcade/Different-BikeBack.png"))); // NOI18N
 
         jButton1.setText("Empezar a jugar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -217,7 +217,7 @@ public class WhiteJack extends javax.swing.JFrame {
         });
 
         jButton2.setBackground(new java.awt.Color(0, 204, 0));
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/monedas/fichas-de-casino (1) (1).png"))); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Arcade/monedas/fichas-de-casino (1) (1).png"))); // NOI18N
         jButton2.setBorderPainted(false);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -228,19 +228,19 @@ public class WhiteJack extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(0, 204, 0));
         jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        D2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/Different-BikeBack.png"))); // NOI18N
+        D2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Arcade/Different-BikeBack.png"))); // NOI18N
         jPanel3.add(D2);
 
-        D1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/Different-BikeBack.png"))); // NOI18N
+        D1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Arcade/Different-BikeBack.png"))); // NOI18N
         jPanel3.add(D1);
 
         jPanel2.setBackground(new java.awt.Color(0, 204, 0));
         jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        J1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/Different-BikeBack.png"))); // NOI18N
+        J1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Arcade/Different-BikeBack.png"))); // NOI18N
         jPanel2.add(J1);
 
-        J2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/Different-BikeBack.png"))); // NOI18N
+        J2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Arcade/Different-BikeBack.png"))); // NOI18N
         jPanel2.add(J2);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -403,14 +403,15 @@ public class WhiteJack extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(WhiteJack.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Blackjack.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(WhiteJack.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Blackjack.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(WhiteJack.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Blackjack.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(WhiteJack.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Blackjack.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
@@ -439,7 +440,7 @@ public class WhiteJack extends javax.swing.JFrame {
     
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new WhiteJack().setVisible(true);
+                new Blackjack().setVisible(true);
             }
         });
     }
