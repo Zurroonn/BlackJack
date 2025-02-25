@@ -4,6 +4,7 @@
  */
 package blackjack;
 
+import Menu.Menu;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.io.BufferedReader;
@@ -177,7 +178,8 @@ public class BlackJack extends javax.swing.JFrame {
         setentaycinco = new javax.swing.JLabel();
         cien = new javax.swing.JLabel();
         cincuenta = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        titulo = new javax.swing.JLabel();
+        retroceder = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -262,9 +264,16 @@ public class BlackJack extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("BLACKJACK");
+        titulo.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        titulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        titulo.setText("BLACKJACK");
+
+        retroceder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Dados/return.png"))); // NOI18N
+        retroceder.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                retrocederMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout todoLayout = new javax.swing.GroupLayout(todo);
         todo.setLayout(todoLayout);
@@ -298,44 +307,50 @@ public class BlackJack extends javax.swing.JFrame {
                     .addComponent(cincuenta, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(60, 60, 60))
             .addGroup(todoLayout.createSequentialGroup()
-                .addGap(285, 285, 285)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(retroceder)
+                .addGap(229, 229, 229)
+                .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(307, Short.MAX_VALUE))
         );
         todoLayout.setVerticalGroup(
             todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(todoLayout.createSequentialGroup()
-                .addGap(81, 81, 81)
-                .addComponent(mazo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(monedero)
-                .addGap(51, 51, 51))
-            .addGroup(todoLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(jLabel1)
-                .addGap(48, 48, 48)
+                .addGap(8, 8, 8)
                 .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(cartasdealer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(todoLayout.createSequentialGroup()
-                        .addComponent(cinco)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(diez)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(veinticinco)))
+                    .addComponent(retroceder)
+                    .addComponent(titulo))
                 .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(todoLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cincuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(setentaycinco)
-                        .addGap(18, 18, 18)
-                        .addComponent(cien))
+                        .addGap(48, 48, 48)
+                        .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cartasdealer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(todoLayout.createSequentialGroup()
+                                .addComponent(cinco)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(diez)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(veinticinco)))
+                        .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(todoLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cincuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(setentaycinco)
+                                .addGap(18, 18, 18)
+                                .addComponent(cien))
+                            .addGroup(todoLayout.createSequentialGroup()
+                                .addGap(39, 39, 39)
+                                .addComponent(jugar)
+                                .addGap(80, 80, 80)
+                                .addComponent(cartasjugador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(172, Short.MAX_VALUE))
                     .addGroup(todoLayout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addComponent(jugar)
-                        .addGap(80, 80, 80)
-                        .addComponent(cartasjugador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(172, Short.MAX_VALUE))
+                        .addGap(23, 23, 23)
+                        .addComponent(mazo)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(monedero)
+                        .addGap(51, 51, 51))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -467,6 +482,16 @@ public class BlackJack extends javax.swing.JFrame {
         apostador=Apostar.cien;
     }//GEN-LAST:event_cienMouseClicked
 
+    private void retrocederMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_retrocederMouseClicked
+        // TODO add your handling code here:
+ 
+    this.setVisible(false); // Oculta la ventana actual
+    new Menu().setVisible(true); // Crea y muestra el menú principal con el dinero actual
+    this.dispose(); // Libera los recursos de la ventana actual
+
+
+    }//GEN-LAST:event_retrocederMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -515,11 +540,12 @@ public class BlackJack extends javax.swing.JFrame {
     private javax.swing.JLabel cinco;
     private javax.swing.JLabel cincuenta;
     private javax.swing.JLabel diez;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JButton jugar;
     private javax.swing.JLabel mazo;
     private javax.swing.JButton monedero;
+    private javax.swing.JLabel retroceder;
     private javax.swing.JLabel setentaycinco;
+    private javax.swing.JLabel titulo;
     private javax.swing.JPanel todo;
     private javax.swing.JLabel veinticinco;
     // End of variables declaration//GEN-END:variables

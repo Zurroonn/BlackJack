@@ -1,6 +1,7 @@
 
 package PPT;
 
+import Menu.Menu;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.net.URL;
@@ -36,11 +37,14 @@ public class ppt extends javax.swing.JFrame {
      * Creates new form Parejas
      * @param usuario
      */
-    public ppt(String usuario){
+    public ppt(String usuario,int dinero){
         
         this.setContentPane(panel);
         initComponents();
-        player.setText(usuario);
+        if (usuario!=null) {
+            player.setText(usuario);
+        }
+        
     }
     public ppt() {
         this.setContentPane(panel);
@@ -108,6 +112,7 @@ public class ppt extends javax.swing.JFrame {
         victoriasjugador = new javax.swing.JLabel();
         victoriasmaquina = new javax.swing.JLabel();
         resultado = new javax.swing.JLabel();
+        retroceder = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -163,6 +168,13 @@ public class ppt extends javax.swing.JFrame {
         resultado.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         resultado.setText("Resultado:");
 
+        retroceder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Dados/return.png"))); // NOI18N
+        retroceder.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                retrocederMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -186,20 +198,27 @@ public class ppt extends javax.swing.JFrame {
                     .addComponent(victoriasmaquina, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(retroceder)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(titulo)
                         .addGap(272, 272, 272))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jugar)
                         .addGap(368, 368, 368))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(21, Short.MAX_VALUE)
-                .addComponent(titulo)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(titulo))
+                    .addComponent(retroceder))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -217,7 +236,7 @@ public class ppt extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(95, 95, 95)
                                 .addComponent(eleccionmaquina, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)))
                         .addComponent(tijera)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -262,6 +281,16 @@ public class ppt extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jugarActionPerformed
+
+    private void retrocederMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_retrocederMouseClicked
+        // TODO add your handling code here:
+
+    this.setVisible(false); // Oculta la ventana actual
+    new Menu().setVisible(true); // Crea y muestra el menú principal con el dinero actual
+    this.dispose(); // Libera los recursos de la ventana actual
+
+
+    }//GEN-LAST:event_retrocederMouseClicked
 
     /**
      * @param args the command line arguments
@@ -315,20 +344,15 @@ public class ppt extends javax.swing.JFrame {
 }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel eleccionmaquina;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JButton jugar;
     private javax.swing.JLabel maquina;
     private javax.swing.JLabel papel;
     private javax.swing.JLabel piedra;
     private javax.swing.JLabel player;
     private javax.swing.JLabel resultado;
+    private javax.swing.JLabel retroceder;
     private javax.swing.JLabel tijera;
     private javax.swing.JLabel titulo;
-    private javax.swing.JTextField titulo1;
-    private javax.swing.JTextField titulo2;
-    private javax.swing.JTextField titulo3;
     private javax.swing.JLabel victoriasjugador;
     private javax.swing.JLabel victoriasmaquina;
     // End of variables declaration//GEN-END:variables

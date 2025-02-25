@@ -4,16 +4,50 @@
  */
 package Dados;
 
+
+import Menu.Menu;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.util.Random;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 /**
  *
  * @author aazur
  */
 public class Dados extends javax.swing.JFrame {
+    FondoPanel panel = new FondoPanel();
+    Random rd = new Random();
+    int sumajugador = 0;
+    int sumamaquina = 0;
+    private ImageIcon[] dados;
+
 
     /**
      * Creates new form Dados
      */
+    public Dados( String usuario,int dinero){
+    this.setContentPane(panel);
+    initComponents();
+        if (usuario!=null) {
+            lanzamiento1.setText("Lanzamiento "+usuario);
+        }
+    
+    }
     public Dados() {
+    this.setContentPane(panel);    
+        this.dados = new ImageIcon[]{
+            new ImageIcon(getClass().getResource("/Dados/dado1.png")),
+            new ImageIcon(getClass().getResource("/Dados/dado2.png")),
+            new ImageIcon(getClass().getResource("/Dados/dado3.png")),
+            new ImageIcon(getClass().getResource("/Dados/dado4.png")),
+            new ImageIcon(getClass().getResource("/Dados/dado5.png")),
+            new ImageIcon(getClass().getResource("/Dados/dado6.png"))
+        };
+
         initComponents();
     }
 
@@ -26,27 +60,52 @@ public class Dados extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        titulo = new javax.swing.JLabel();
+        dosdados = new javax.swing.JLabel();
+        lanzamiento1 = new javax.swing.JLabel();
+        lanzamiento2 = new javax.swing.JLabel();
+        jugadordado = new javax.swing.JLabel();
+        maquinadado = new javax.swing.JLabel();
+        suma1 = new javax.swing.JLabel();
+        suma2 = new javax.swing.JLabel();
+        retroceder = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("LA SUERTE DE LOS DADOS");
+        titulo.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        titulo.setForeground(new java.awt.Color(153, 0, 153));
+        titulo.setText("LA SUERTE DE LOS DADOS");
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Dados/pngegg (10).png"))); // NOI18N
+        dosdados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Dados/pngegg (10).png"))); // NOI18N
 
-        jLabel3.setText("Lanzamiento jugador");
+        lanzamiento1.setForeground(new java.awt.Color(153, 0, 153));
+        lanzamiento1.setText("Lanzamiento jugador");
 
-        jLabel4.setText("Lanzamiento máquina");
+        lanzamiento2.setForeground(new java.awt.Color(153, 0, 153));
+        lanzamiento2.setText("Lanzamiento máquina");
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Dados/dado.png"))); // NOI18N
+        jugadordado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Dados/dado.png"))); // NOI18N
+        jugadordado.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jugadordadoMouseClicked(evt);
+            }
+        });
 
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Dados/dado.png"))); // NOI18N
+        maquinadado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Dados/dado.png"))); // NOI18N
+
+        suma1.setForeground(new java.awt.Color(153, 0, 153));
+        suma1.setText("Suma total:");
+
+        suma2.setForeground(new java.awt.Color(153, 0, 153));
+        suma2.setText("Suma total:");
+
+        retroceder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Dados/return.png"))); // NOI18N
+        retroceder.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                retrocederMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -55,51 +114,120 @@ public class Dados extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(56, 56, 56)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(jLabel3)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
-                .addComponent(jLabel2)
+                        .addComponent(suma1)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jugadordado)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(37, 37, 37)
+                                .addComponent(lanzamiento1)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 141, Short.MAX_VALUE)
+                        .addComponent(dosdados)
+                        .addGap(37, 37, 37)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(lanzamiento2)
+                        .addGap(88, 88, 88))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(71, 71, 71)
-                        .addComponent(jLabel6)
-                        .addGap(61, 61, 61))
+                        .addComponent(suma2)
+                        .addGap(176, 176, 176))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel4)
-                        .addGap(88, 88, 88))))
+                        .addComponent(maquinadado)
+                        .addGap(73, 73, 73))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(286, 286, 286)
-                .addComponent(jLabel1)
+                .addContainerGap()
+                .addComponent(retroceder)
+                .addGap(243, 243, 243)
+                .addComponent(titulo)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(133, 133, 133)
-                        .addComponent(jLabel3)
+                        .addContainerGap()
+                        .addComponent(retroceder)
+                        .addGap(111, 111, 111)
+                        .addComponent(lanzamiento1)
                         .addGap(55, 55, 55)
-                        .addComponent(jLabel5))
+                        .addComponent(jugadordado))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(138, 138, 138)
-                        .addComponent(jLabel4)
-                        .addGap(40, 40, 40)
-                        .addComponent(jLabel6))
+                        .addComponent(lanzamiento2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(maquinadado))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(19, 19, 19)
-                        .addComponent(jLabel1)
-                        .addGap(63, 63, 63)
-                        .addComponent(jLabel2)))
-                .addContainerGap(106, Short.MAX_VALUE))
+                        .addComponent(titulo)
+                        .addGap(61, 61, 61)
+                        .addComponent(dosdados)))
+                .addGap(35, 35, 35)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(suma1)
+                    .addComponent(suma2))
+                .addContainerGap(340, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jugadordadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jugadordadoMouseClicked
+        // TODO add your handling code here:
+        jugar();
+    }//GEN-LAST:event_jugadordadoMouseClicked
+
+    private void retrocederMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_retrocederMouseClicked
+        // TODO add your handling code here:
+            this.setVisible(false); // Oculta la ventana actual
+    new Menu().setVisible(true); // Crea y muestra el menú principal con el dinero actual
+    this.dispose(); // Libera los recursos de la ventana actual
+
+
+    }//GEN-LAST:event_retrocederMouseClicked
+    public void jugar() {
+        int dadoJugador = rd.nextInt(6);
+        int dadoMaquina = rd.nextInt(6);
+
+        sumajugador = sumajugador + dadoJugador;
+        sumamaquina = sumamaquina + dadoMaquina;
+
+        suma1.setText("Suma total: " + sumajugador);
+        suma2.setText("Suma total: " + sumamaquina);
+
+        actualizarDado(jugadordado, dadoJugador);
+        actualizarDado(maquinadado, dadoMaquina);
+        if (sumajugador >= 20 & sumamaquina < sumajugador) {
+            JOptionPane.showMessageDialog(this, "Ha ganado el jugador!");
+            acabar();
+        }
+        if (sumamaquina >= 20 & sumamaquina > sumajugador) {
+            JOptionPane.showMessageDialog(this, "Ganó la máquina!");
+            acabar();
+        }
+        }
+
+    private void actualizarDado(JLabel label, int dado) {
+        label.setIcon(dados[dado]); // Se usa el array directamente
+
+    }
+    private void acabar(){
+        int opcion=JOptionPane.showConfirmDialog(this, "Volver a jugar","Continuar",JOptionPane.YES_NO_OPTION);
+        if (opcion==JOptionPane.YES_OPTION) {
+            suma1.setText("Suma total: ");
+            suma2.setText("Suma total: ");
+            sumajugador=0;
+            sumamaquina=0;
+            JOptionPane.showMessageDialog(this, "A disfrutar!");
+        }else{
+            JOptionPane.showMessageDialog(this, "Adios!");
+            this.dispose();
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -134,13 +262,30 @@ public class Dados extends javax.swing.JFrame {
             }
         });
     }
+    class FondoPanel extends JPanel {
 
+    private Image imagen;
+
+    @Override
+    public void paint(Graphics g) {
+
+        imagen = new ImageIcon(getClass().getResource("/Dados/fondodado.jpg")).getImage();
+        g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
+
+        setOpaque(false);
+
+        super.paint(g);
+    }
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel dosdados;
+    private javax.swing.JLabel jugadordado;
+    private javax.swing.JLabel lanzamiento1;
+    private javax.swing.JLabel lanzamiento2;
+    private javax.swing.JLabel maquinadado;
+    private javax.swing.JLabel retroceder;
+    private javax.swing.JLabel suma1;
+    private javax.swing.JLabel suma2;
+    private javax.swing.JLabel titulo;
     // End of variables declaration//GEN-END:variables
 }

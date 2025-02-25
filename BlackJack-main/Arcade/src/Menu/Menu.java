@@ -4,6 +4,7 @@
  */
 package Menu;
 
+import Dados.Dados;
 import blackjack.BlackJack;
 import PPT.ppt;
 
@@ -28,9 +29,11 @@ public class Menu extends javax.swing.JFrame {
     private static int dinerousuario = 0;
     FondoPanel panel = new FondoPanel();
     private static String player;
+
     /**
      * Creates new form Menu
      */
+
     public Menu() {
         this.setContentPane(panel);
         this.setExtendedState(this.MAXIMIZED_BOTH);
@@ -47,47 +50,77 @@ public class Menu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel2 = new FondoPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        todo = new FondoPanel();
+        black = new javax.swing.JLabel();
+        ppt = new javax.swing.JLabel();
+        dad = new javax.swing.JLabel();
+        cerrar = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         setResizable(false);
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Menu/pngegg.png"))); // NOI18N
-        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+        black.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Menu/pngegg.png"))); // NOI18N
+        black.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel1MouseClicked(evt);
+                blackMouseClicked(evt);
             }
         });
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Menu/PPTicon.png"))); // NOI18N
-        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+        ppt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Menu/PPTicon.png"))); // NOI18N
+        ppt.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel2MouseClicked(evt);
+                pptMouseClicked(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(142, 142, 142)
-                .addComponent(jLabel2)
-                .addContainerGap(386, Short.MAX_VALUE))
+        dad.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Menu/logodado.png"))); // NOI18N
+        dad.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                dadMouseClicked(evt);
+            }
+        });
+
+        cerrar.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cerrar.setForeground(new java.awt.Color(204, 0, 153));
+        cerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Menu/close.png"))); // NOI18N
+        cerrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cerrarMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout todoLayout = new javax.swing.GroupLayout(todo);
+        todo.setLayout(todoLayout);
+        todoLayout.setHorizontalGroup(
+            todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(todoLayout.createSequentialGroup()
+                .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(todoLayout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(black, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(142, 142, 142)
+                        .addComponent(ppt)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 186, Short.MAX_VALUE)
+                        .addComponent(dad))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, todoLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cerrar)))
+                .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(527, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))
+        todoLayout.setVerticalGroup(
+            todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(todoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ppt)
+                    .addComponent(black, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(23, 23, 23))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, todoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(cerrar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 648, Short.MAX_VALUE)
+                .addComponent(dad))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -95,13 +128,13 @@ public class Menu extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(todo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(todo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -109,28 +142,44 @@ public class Menu extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+    private void blackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_blackMouseClicked
         // TODO add your handling code here:
         BlackJack black = new BlackJack(dinerousuario);
 
         black.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jLabel1MouseClicked
+    }//GEN-LAST:event_blackMouseClicked
 
-    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+    private void pptMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pptMouseClicked
         // TODO add your handling code here:
-        ppt piedra = new ppt(player);
+        ppt piedra = new ppt(player, dinerousuario);
 
         piedra.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jLabel2MouseClicked
+    }//GEN-LAST:event_pptMouseClicked
+
+    private void dadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dadMouseClicked
+        // TODO add your handling code here:
+        Dados dado = new Dados(player, dinerousuario);
+
+        dado.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_dadMouseClicked
+
+    private void cerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cerrarMouseClicked
+        // TODO add your handling code here:
+        int result = JOptionPane.showConfirmDialog(this,  "¿ESTAS SEGURO?","SALIR", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            this.dispose();
+        }
+    }//GEN-LAST:event_cerrarMouseClicked
     private static void iniciarSesion() {
         String usuario = JOptionPane.showInputDialog(null, "Introduce tu usuario:", "Inicio de sesión", JOptionPane.QUESTION_MESSAGE);
         if (usuario == null) {
             System.exit(0);
             return;
         }
-        player=usuario;
+        player = usuario;
         String contraseña = JOptionPane.showInputDialog(null, "Introduce tu contraseña:", "Inicio de sesión", JOptionPane.QUESTION_MESSAGE);
         if (contraseña == null) {
             System.exit(0);
@@ -140,7 +189,7 @@ public class Menu extends javax.swing.JFrame {
         Usuario user = usuarioDAO.iniciarSesion(usuario, contraseña);
         if (user != null) {
             dinerousuario = user.getDinero();
-            
+
             JOptionPane.showMessageDialog(null, "Bienvenido, " + usuario + "! \nDinero disponible: $" + dinerousuario, "Sesión iniciada", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -155,7 +204,7 @@ public class Menu extends javax.swing.JFrame {
             System.exit(0);
             return;
         }
-        
+
         String contraseña = JOptionPane.showInputDialog(null, "Elige una contraseña:", "Crear usuario", JOptionPane.QUESTION_MESSAGE);
         if (contraseña == null || contraseña.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "La contraseña no puede estar vacía.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -180,10 +229,10 @@ public class Menu extends javax.swing.JFrame {
 
             Usuario newUser = new Usuario(usuario, contraseña, dinero);
             boolean creado = usuarioDAO.crearUsuario(newUser); // Verifica si el usuario se creó correctamente
-            
+
             if (creado) {
                 dinerousuario = dinero;
-                player=usuario;
+                player = usuario;
                 JOptionPane.showMessageDialog(null, "Usuario creado con éxito. Bienvenido, " + usuario + "!", "Usuario creado", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(null, "El usuario ya existe. Intenta con otro nombre.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -265,8 +314,10 @@ public class Menu extends javax.swing.JFrame {
         }
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel black;
+    private javax.swing.JLabel cerrar;
+    private javax.swing.JLabel dad;
+    private javax.swing.JLabel ppt;
+    private javax.swing.JPanel todo;
     // End of variables declaration//GEN-END:variables
 }
