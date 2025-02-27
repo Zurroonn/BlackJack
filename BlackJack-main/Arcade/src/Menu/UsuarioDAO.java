@@ -21,10 +21,10 @@ public class UsuarioDAO {
     public boolean crearUsuario(Usuario usuario) {
         if (buscarUsuario(usuario.getNombre()) == null) { // Si el usuario no existe
             collection.insertOne(usuario.toDocument());  // Lo inserta en la base de datos
-            System.out.println("Usuario creado exitosamente.");
+
             return true; // Indica que la creación fue exitosa
         } else {
-            System.out.println("El usuario ya existe.");
+
             return false; // Indica que el usuario ya existía
         }
     }
@@ -46,11 +46,7 @@ public class UsuarioDAO {
     public void actualizarDinero(String nombre, int nuevoDinero) {
         collection.updateOne(Filters.eq("nombre", nombre),
                 new Document("$set", new Document("dinero", nuevoDinero)));
-        System.out.println("Dinero actualizado.");
+
     }
 
-    public void eliminarUsuario(String nombre) {
-        collection.deleteOne(Filters.eq("nombre", nombre));
-        System.out.println("Usuario eliminado.");
-    }
 }

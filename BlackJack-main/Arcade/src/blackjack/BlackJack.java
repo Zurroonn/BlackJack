@@ -5,39 +5,41 @@
 package blackjack;
 
 import Menu.Menu;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import Menu.UsuarioDAO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+
 
 /**
  *
  * @author aazur
  */
 public class BlackJack extends javax.swing.JFrame {
-    private static final String ARCHIVO_USUARIOS = "usuarios.txt";
-    private static int dinerousuario = 0;
 
+    private static int dinerousuario = 0;
+    private static String usuario;
+    
+    private static UsuarioDAO userdao = new UsuarioDAO();
+    
     private List<String[]> cartasJugadorValores = new ArrayList<>(); // Guarda el nombre y la imagen de la carta
     private List<String[]> cartasDealerValores = new ArrayList<>(); // Guarda el nombre y la imagen de cada carta
 
     private List<JLabel> cartasJugador = new ArrayList<>();
     private List<JLabel> cartasDealer = new ArrayList<>();
     private int contases = 0;
-
+    
     private static Baraja baraja = new Baraja();
     private static Scanner sc = new Scanner(System.in);
-
+    
+    private static boolean apuesta = false;
+    
+    private static int apuestaenvivo = 0;
+    ImageIcon imagen = new ImageIcon(getClass().getResource("/blackjack/monedas/fichas.png"));
+    
     enum Apostar {
         cinco,
         diez,
@@ -46,7 +48,7 @@ public class BlackJack extends javax.swing.JFrame {
         setentaycinco,
         cien,
         cero
-
+        
     }
     Apostar apostador = Apostar.cero;
 
@@ -57,71 +59,73 @@ public class BlackJack extends javax.swing.JFrame {
         initComponents();
         
     }
-
-    public BlackJack(int dinero) {
+    
+    public BlackJack(String jugador,int dinero) {
+        usuario=jugador;
         dinerousuario = dinero;
         initComponents();
     }
-
+    
     public boolean verificarBlackJack(int sumajugador, int sumadealer, ImageIcon imagen) {
         if (sumajugador == 21 && sumadealer != 21) {
             D2.setIcon(imagen);
             JOptionPane.showMessageDialog(this, "GANASTE!");
+            ganarapuesta();
             return true;
         }
-
+        
         if (sumajugador == 21 && sumadealer == 21) {
             D2.setIcon(imagen);
             JOptionPane.showMessageDialog(this, "EMPATASTE!");
             return true;
         }
-
+        
         return false;
     }
-
+    
     public int turnoJugador(int sumajugador) {
         String[] cartaElegida = baraja.robarCarta();
         ImageIcon imagenCarta = new ImageIcon(getClass().getResource(cartaElegida[1]));
-
+        
         JLabel nuevaCarta = new JLabel();
         nuevaCarta.setIcon(imagenCarta);
-
+        
         cartasJugador.add(nuevaCarta);
         cartasJugadorValores.add(cartaElegida);
-
+        
         cartasjugador.add(nuevaCarta);
         cartasjugador.revalidate();
         cartasjugador.repaint();
-
+        
         sumajugador += comprobarNumero(cartaElegida[0], sumajugador);
         sumajugador = ajustarAses(sumajugador, cartasJugadorValores);
-
+        
         return sumajugador;
     }
-
+    
     public int turnoDealer(int sumadealer, int sumajugador) {
         while (sumadealer < 17 || (sumadealer < sumajugador && sumadealer <= 21)) {
             String[] cartaElegida = baraja.robarCarta();
             ImageIcon imagenCarta = new ImageIcon(getClass().getResource(cartaElegida[1]));
-
+            
             JLabel nuevaCarta = new JLabel();
             nuevaCarta.setIcon(imagenCarta);
-
+            
             cartasdealer.add(nuevaCarta);  // Agregar la carta al panel del dealer
             cartasdealer.revalidate();
             cartasdealer.repaint();
-
+            
             cartasDealer.add(nuevaCarta);
             cartasDealerValores.add(cartaElegida);
-
+            
             sumadealer += comprobarNumero(cartaElegida[0], sumadealer);
             sumadealer = ajustarAses(sumadealer, cartasDealerValores);
             System.out.println(sumadealer);
         }
-
+        
         return sumadealer;
     }
-
+    
     private int ajustarAses(int suma, List<String[]> cartas) {
         for (String[] carta : cartas) {
             if (carta[0].equals("1") && suma > 21) {
@@ -130,21 +134,24 @@ public class BlackJack extends javax.swing.JFrame {
         }
         return suma;
     }
-
+    
     public void determinarGanador(int sumajugador, int sumadealer) {
         if (sumadealer > 21) {
             JOptionPane.showMessageDialog(this, "El dealer se pasó ganaste");
+            ganarapuesta();
         } else if (sumadealer == sumajugador) {
             JOptionPane.showMessageDialog(this, "Empate");
         } else if (sumadealer > sumajugador) {
             JOptionPane.showMessageDialog(this, "El dealer ganó");
+            perdidaapuesta();
         } else {
             JOptionPane.showMessageDialog(this, "Ganaste");
+            ganarapuesta();
         }
     }
-
+    
     public int comprobarNumero(String numero, int suma) {
-
+        
         if (numero.matches(".*(2|3|4|5|6|7|8|9|10).*")) {
             return Integer.parseInt(numero.replaceAll("\\D", ""));
         }
@@ -157,7 +164,7 @@ public class BlackJack extends javax.swing.JFrame {
         }
         return 10; // J, Q, K valen 10
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -180,8 +187,10 @@ public class BlackJack extends javax.swing.JFrame {
         cincuenta = new javax.swing.JLabel();
         titulo = new javax.swing.JLabel();
         retroceder = new javax.swing.JLabel();
+        apuest = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         todo.setBackground(new java.awt.Color(0, 204, 0));
 
@@ -195,7 +204,7 @@ public class BlackJack extends javax.swing.JFrame {
         });
 
         monedero.setBackground(new java.awt.Color(0, 204, 0));
-        monedero.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/monedas/fichas-de-casino (1) (1).png"))); // NOI18N
+        monedero.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/monedas/dinero.png"))); // NOI18N
         monedero.setBorderPainted(false);
         monedero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -275,43 +284,53 @@ public class BlackJack extends javax.swing.JFrame {
             }
         });
 
+        apuest.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                apuestMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout todoLayout = new javax.swing.GroupLayout(todo);
         todo.setLayout(todoLayout);
         todoLayout.setHorizontalGroup(
             todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, todoLayout.createSequentialGroup()
+                .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(todoLayout.createSequentialGroup()
+                        .addGap(274, 274, 274)
+                        .addComponent(jugar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(setentaycinco, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(cincuenta, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(todoLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(apuest, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(62, 62, 62)
+                        .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cinco)
+                            .addComponent(diez)
+                            .addComponent(veinticinco)
+                            .addComponent(cien))))
+                .addGap(60, 60, 60))
+            .addGroup(todoLayout.createSequentialGroup()
                 .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(todoLayout.createSequentialGroup()
-                        .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(todoLayout.createSequentialGroup()
-                                .addGap(49, 49, 49)
-                                .addComponent(monedero))
-                            .addGroup(todoLayout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(mazo)))
+                        .addContainerGap()
+                        .addComponent(retroceder)
+                        .addGap(229, 229, 229)
+                        .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(todoLayout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addComponent(monedero))
+                    .addGroup(todoLayout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addComponent(mazo)
                         .addGap(75, 75, 75)
                         .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(cartasdealer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cartasjugador, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(todoLayout.createSequentialGroup()
-                        .addGap(274, 274, 274)
-                        .addComponent(jugar)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(cinco)
-                        .addComponent(diez)
-                        .addComponent(veinticinco)
-                        .addComponent(cien))
-                    .addComponent(setentaycinco, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(cincuenta, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(60, 60, 60))
-            .addGroup(todoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(retroceder)
-                .addGap(229, 229, 229)
-                .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(307, Short.MAX_VALUE))
+                            .addComponent(cartasjugador, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addGap(220, 500, Short.MAX_VALUE))
         );
         todoLayout.setVerticalGroup(
             todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -333,18 +352,24 @@ public class BlackJack extends javax.swing.JFrame {
                                 .addComponent(veinticinco)))
                         .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(todoLayout.createSequentialGroup()
+                                .addGap(39, 39, 39)
+                                .addComponent(jugar)
+                                .addGap(80, 80, 80)
+                                .addComponent(cartasjugador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(174, Short.MAX_VALUE))
+                            .addGroup(todoLayout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cincuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(setentaycinco)
-                                .addGap(18, 18, 18)
-                                .addComponent(cien))
-                            .addGroup(todoLayout.createSequentialGroup()
-                                .addGap(39, 39, 39)
-                                .addComponent(jugar)
-                                .addGap(80, 80, 80)
-                                .addComponent(cartasjugador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(172, Short.MAX_VALUE))
+                                .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(todoLayout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(cien))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, todoLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(apuest, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(110, 110, 110))))))
                     .addGroup(todoLayout.createSequentialGroup()
                         .addGap(23, 23, 23)
                         .addComponent(mazo)
@@ -383,10 +408,10 @@ public class BlackJack extends javax.swing.JFrame {
         J2.setIcon(icon);
         D1.setIcon(icon);
         D2.setIcon(icon);
-
+        
         baraja.reiniciarBaraja();
         contases = 0;
-
+        
         int sumajugador = 0;
         JLabel[] etiquetasCartas = {J1, J2};
         for (int i = 0; i < 2; i++) {               //CARTAS INICIALES JUGADOR
@@ -397,7 +422,7 @@ public class BlackJack extends javax.swing.JFrame {
             // Asignar la imagen a la etiqueta correspondiente
             etiquetasCartas[i].setIcon(imagenCarta);
         }
-
+        
         int sumadealer = 0;         //CARTAS INICIALES DEALER
         JLabel[] etiquetasCartasDealer = {D1, D2};
         ImageIcon cartasinrevelar = new ImageIcon();
@@ -412,41 +437,52 @@ public class BlackJack extends javax.swing.JFrame {
                 etiquetasCartasDealer[i].setIcon(icon);
                 cartasinrevelar = new ImageIcon(getClass().getResource(cartaElegida[1]));
             }
-
+            
         }
         System.out.println("Jugador: suma = " + sumajugador);
         System.out.println("Dealer: suma = " + sumadealer);
         if (verificarBlackJack(sumajugador, sumadealer, cartasinrevelar)) {
             return;
         }
-
+        
         do {
             int respuesta = JOptionPane.showConfirmDialog(this, "Robar", "¿Quieres robar?", JOptionPane.YES_NO_OPTION);
             if (respuesta == JOptionPane.YES_OPTION) {
-
+                
                 sumajugador = turnoJugador(sumajugador);
                 System.out.println(sumajugador);
-
+                
             } else {
                 break;
             }
         } while (sumajugador < 21);
-
+        
         D2.setIcon(cartasinrevelar);
         if (sumajugador > 21) {
             JOptionPane.showMessageDialog(this, "PERDISTE!");
+            perdidaapuesta();
             return;
         }
         if (verificarBlackJack(sumajugador, sumadealer, cartasinrevelar)) {
             return;
         }
-
+        
         sumadealer = turnoDealer(sumadealer, sumajugador);
-
+        
         determinarGanador(sumajugador, sumadealer);
+        apuestaenvivo=0;
+        apuest.setIcon(null);
         return;
     }//GEN-LAST:event_jugarActionPerformed
-
+    private void perdidaapuesta(){
+        dinerousuario=dinerousuario-apuestaenvivo;
+        userdao.actualizarDinero(usuario, dinerousuario);
+    }
+    private void ganarapuesta(){
+        dinerousuario=dinerousuario+apuestaenvivo;
+        userdao.actualizarDinero(usuario, dinerousuario);
+    
+    }
     private void monederoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monederoActionPerformed
         // TODO add your handling code here:
         JOptionPane.showMessageDialog(this, "Usted tiene $" + dinerousuario);
@@ -454,43 +490,60 @@ public class BlackJack extends javax.swing.JFrame {
 
     private void cincoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cincoMouseClicked
         // TODO add your handling code here:
-        apostador=Apostar.cinco;
+        apostador = Apostar.cinco;
+        apuestaenvivo = apuestaenvivo + 5;
+        apuest.setIcon(imagen);
     }//GEN-LAST:event_cincoMouseClicked
 
     private void diezMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diezMouseClicked
         // TODO add your handling code here:
-        apostador=Apostar.diez;
+        apostador = Apostar.diez;
+        apuestaenvivo = apuestaenvivo + 10;
+        apuest.setIcon(imagen);
     }//GEN-LAST:event_diezMouseClicked
 
     private void veinticincoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_veinticincoMouseClicked
         // TODO add your handling code here:
-        apostador=Apostar.veinticinco;
+        apostador = Apostar.veinticinco;
+        apuestaenvivo = apuestaenvivo + 25;
+        apuest.setIcon(imagen);
     }//GEN-LAST:event_veinticincoMouseClicked
 
     private void cincuentaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cincuentaMouseClicked
         // TODO add your handling code here:
-        apostador=Apostar.cincuenta;
+        apostador = Apostar.cincuenta;
+        apuestaenvivo = apuestaenvivo + 50;
+        apuest.setIcon(imagen);
     }//GEN-LAST:event_cincuentaMouseClicked
 
     private void setentaycincoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_setentaycincoMouseClicked
         // TODO add your handling code here:
-        apostador=Apostar.setentaycinco;
+        apostador = Apostar.setentaycinco;
+        apuestaenvivo = apuestaenvivo + 75;
+        apuest.setIcon(imagen);
     }//GEN-LAST:event_setentaycincoMouseClicked
 
     private void cienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cienMouseClicked
         // TODO add your handling code here:
-        apostador=Apostar.cien;
+        apostador = Apostar.cien;
+        apuestaenvivo = apuestaenvivo + 100;
+        apuest.setIcon(imagen);
     }//GEN-LAST:event_cienMouseClicked
 
     private void retrocederMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_retrocederMouseClicked
         // TODO add your handling code here:
- 
-    this.setVisible(false); // Oculta la ventana actual
-    new Menu().setVisible(true); // Crea y muestra el menú principal con el dinero actual
-    this.dispose(); // Libera los recursos de la ventana actual
+        
+        this.setVisible(false); // Oculta la ventana actual
+        new Menu().setVisible(true); // Crea y muestra el menú principal con el dinero actual
+        this.dispose(); // Libera los recursos de la ventana actual
 
 
     }//GEN-LAST:event_retrocederMouseClicked
+
+    private void apuestMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_apuestMouseClicked
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Estas apostando " + apuestaenvivo);
+    }//GEN-LAST:event_apuestMouseClicked
 
     /**
      * @param args the command line arguments
@@ -534,6 +587,7 @@ public class BlackJack extends javax.swing.JFrame {
     private javax.swing.JLabel D2;
     private javax.swing.JLabel J1;
     private javax.swing.JLabel J2;
+    private javax.swing.JLabel apuest;
     private javax.swing.JPanel cartasdealer;
     private javax.swing.JPanel cartasjugador;
     private javax.swing.JLabel cien;

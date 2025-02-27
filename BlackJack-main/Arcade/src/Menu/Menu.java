@@ -10,6 +10,7 @@ import PPT.ppt;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import static java.awt.SystemColor.menu;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -33,10 +34,8 @@ public class Menu extends javax.swing.JFrame {
     /**
      * Creates new form Menu
      */
-
     public Menu() {
         this.setContentPane(panel);
-        this.setExtendedState(this.MAXIMIZED_BOTH);
         initComponents();
 
     }
@@ -119,7 +118,7 @@ public class Menu extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, todoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(cerrar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 648, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 506, Short.MAX_VALUE)
                 .addComponent(dad))
         );
 
@@ -144,7 +143,7 @@ public class Menu extends javax.swing.JFrame {
 
     private void blackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_blackMouseClicked
         // TODO add your handling code here:
-        BlackJack black = new BlackJack(dinerousuario);
+        BlackJack black = new BlackJack(player,dinerousuario);
 
         black.setVisible(true);
         this.dispose();
@@ -168,7 +167,7 @@ public class Menu extends javax.swing.JFrame {
 
     private void cerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cerrarMouseClicked
         // TODO add your handling code here:
-        int result = JOptionPane.showConfirmDialog(this,  "¿ESTAS SEGURO?","SALIR", JOptionPane.YES_NO_OPTION);
+        int result = JOptionPane.showConfirmDialog(this, "¿ESTAS SEGURO?", "SALIR", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             this.dispose();
         }
@@ -244,6 +243,28 @@ public class Menu extends javax.swing.JFrame {
         }
     }
 
+    public void mostrarOpcionesInicio() {
+        JOptionPane.showMessageDialog(this, "¡Bienvenido al juego de Blackjack!", "Bienvenida", JOptionPane.INFORMATION_MESSAGE);
+
+        String[] opciones = {"Iniciar sesión", "Crear usuario"};
+        int seleccion = JOptionPane.showOptionDialog(
+                this,
+                "Selecciona una opción para continuar:",
+                "Menú",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                opciones,
+                opciones[0]
+        );
+
+        if (seleccion == 0) {
+            iniciarSesion();
+        } else if (seleccion == 1) {
+            crearUsuario();
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -272,30 +293,15 @@ public class Menu extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        JOptionPane.showMessageDialog(null, "¡Bienvenido al juego de Blackjack!", "Bienvenida", JOptionPane.INFORMATION_MESSAGE);
-
-        String[] opciones = {"Iniciar sesión", "Crear usuario"};
-        int seleccion = JOptionPane.showOptionDialog(
-                null,
-                "Selecciona una opción para continuar:",
-                "Menú",
-                JOptionPane.DEFAULT_OPTION,
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                opciones,
-                opciones[0]
-        );
-
-        if (seleccion == 0) {
-            iniciarSesion();
-        } else if (seleccion == 1) {
-            crearUsuario();
-        }
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Menu().setVisible(true);
+                Menu menu = new Menu(); // Crear la instancia del menú
+                menu.setVisible(true);  // Mostrar la ventana principal
+                menu.mostrarOpcionesInicio(); // Llamar a un método para las opciones
+
             }
         });
+
     }
 
     class FondoPanel extends JPanel {

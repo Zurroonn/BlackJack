@@ -31,6 +31,15 @@ public class Dados extends javax.swing.JFrame {
      */
     public Dados( String usuario,int dinero){
     this.setContentPane(panel);
+        this.setContentPane(panel);    
+        this.dados = new ImageIcon[]{
+            new ImageIcon(getClass().getResource("/Dados/dado1.png")),
+            new ImageIcon(getClass().getResource("/Dados/dado2.png")),
+            new ImageIcon(getClass().getResource("/Dados/dado3.png")),
+            new ImageIcon(getClass().getResource("/Dados/dado4.png")),
+            new ImageIcon(getClass().getResource("/Dados/dado5.png")),
+            new ImageIcon(getClass().getResource("/Dados/dado6.png"))
+        };
     initComponents();
         if (usuario!=null) {
             lanzamiento1.setText("Lanzamiento "+usuario);
