@@ -39,7 +39,11 @@ public class Menu extends javax.swing.JFrame {
         initComponents();
 
     }
-
+    public Menu(String user,int diner){
+    dinerousuario=diner;
+    player=user;
+    initComponents();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -54,19 +58,20 @@ public class Menu extends javax.swing.JFrame {
         ppt = new javax.swing.JLabel();
         dad = new javax.swing.JLabel();
         cerrar = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         setResizable(false);
 
-        black.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Menu/pngegg.png"))); // NOI18N
+        black.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Menu/BJicono.png"))); // NOI18N
         black.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 blackMouseClicked(evt);
             }
         });
 
-        ppt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Menu/PPTicon.png"))); // NOI18N
+        ppt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Menu/iconopiedra.png"))); // NOI18N
         ppt.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 pptMouseClicked(evt);
@@ -89,6 +94,13 @@ public class Menu extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Menu/mony2.png"))); // NOI18N
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel2MouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout todoLayout = new javax.swing.GroupLayout(todo);
         todo.setLayout(todoLayout);
         todoLayout.setHorizontalGroup(
@@ -98,28 +110,34 @@ public class Menu extends javax.swing.JFrame {
                     .addGroup(todoLayout.createSequentialGroup()
                         .addGap(43, 43, 43)
                         .addComponent(black, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(142, 142, 142)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 171, Short.MAX_VALUE)
                         .addComponent(ppt)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 186, Short.MAX_VALUE)
+                        .addGap(157, 157, 157)
                         .addComponent(dad))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, todoLayout.createSequentialGroup()
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cerrar)))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         todoLayout.setVerticalGroup(
             todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(todoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ppt)
-                    .addComponent(black, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(black, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, todoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(cerrar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 506, Short.MAX_VALUE)
-                .addComponent(dad))
+                .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 435, Short.MAX_VALUE)
+                .addGroup(todoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(dad, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, todoLayout.createSequentialGroup()
+                        .addComponent(ppt)
+                        .addGap(50, 50, 50))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -172,6 +190,11 @@ public class Menu extends javax.swing.JFrame {
             this.dispose();
         }
     }//GEN-LAST:event_cerrarMouseClicked
+
+    private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this,"Tu saldo es de $"+dinerousuario);
+    }//GEN-LAST:event_jLabel2MouseClicked
     private static void iniciarSesion() {
         String usuario = JOptionPane.showInputDialog(null, "Introduce tu usuario:", "Inicio de sesión", JOptionPane.QUESTION_MESSAGE);
         if (usuario == null) {
@@ -323,6 +346,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JLabel black;
     private javax.swing.JLabel cerrar;
     private javax.swing.JLabel dad;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel ppt;
     private javax.swing.JPanel todo;
     // End of variables declaration//GEN-END:variables

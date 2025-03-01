@@ -4,8 +4,8 @@
  */
 package Dados;
 
-
 import Menu.Menu;
+import Menu.UsuarioDAO;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.Random;
@@ -19,19 +19,42 @@ import javax.swing.JPanel;
  * @author aazur
  */
 public class Dados extends javax.swing.JFrame {
+
+    enum Apostar {
+        cinco,
+        diez,
+        veinticinco,
+        cincuenta,
+        setentaycinco,
+        cien,
+        cero
+
+    }
+    private static int comprobaciondinero = 0;
+    Apostar apostador = Apostar.cero;
+    private static int apuestaenvivo = 0;
+    ImageIcon imagen2 = new ImageIcon(getClass().getResource("/Dados/fichicas.png"));
+    ImageIcon imagen = new ImageIcon(getClass().getResource("/Dados/dado.png"));
+    private static UsuarioDAO userdao = new UsuarioDAO();
+    private static String usuar;
+
     FondoPanel panel = new FondoPanel();
     Random rd = new Random();
     int sumajugador = 0;
     int sumamaquina = 0;
     private ImageIcon[] dados;
 
+    int dinerouser = 0;
 
     /**
      * Creates new form Dados
+     *
+     * @param usuario
+     * @param dinero
      */
-    public Dados( String usuario,int dinero){
-    this.setContentPane(panel);
-        this.setContentPane(panel);    
+    public Dados(String usuario, int dinero) {
+        this.setContentPane(panel);
+        this.setContentPane(panel);
         this.dados = new ImageIcon[]{
             new ImageIcon(getClass().getResource("/Dados/dado1.png")),
             new ImageIcon(getClass().getResource("/Dados/dado2.png")),
@@ -40,14 +63,17 @@ public class Dados extends javax.swing.JFrame {
             new ImageIcon(getClass().getResource("/Dados/dado5.png")),
             new ImageIcon(getClass().getResource("/Dados/dado6.png"))
         };
-    initComponents();
-        if (usuario!=null) {
-            lanzamiento1.setText("Lanzamiento "+usuario);
+        dinerouser = dinero;
+        comprobaciondinero = dinerouser;
+        initComponents();
+        if (usuario != null) {
+            lanzamiento1.setText("Lanzamiento " + usuario);
         }
-    
+        usuar = usuario;
     }
+
     public Dados() {
-    this.setContentPane(panel);    
+        this.setContentPane(panel);
         this.dados = new ImageIcon[]{
             new ImageIcon(getClass().getResource("/Dados/dado1.png")),
             new ImageIcon(getClass().getResource("/Dados/dado2.png")),
@@ -78,22 +104,35 @@ public class Dados extends javax.swing.JFrame {
         suma1 = new javax.swing.JLabel();
         suma2 = new javax.swing.JLabel();
         retroceder = new javax.swing.JLabel();
+        cerrar = new javax.swing.JLabel();
+        money = new javax.swing.JLabel();
+        cinco = new javax.swing.JLabel();
+        diez = new javax.swing.JLabel();
+        veinticinco = new javax.swing.JLabel();
+        setentaycinco = new javax.swing.JLabel();
+        cien = new javax.swing.JLabel();
+        cincuenta = new javax.swing.JLabel();
+        apuest = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        setResizable(false);
 
-        titulo.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        titulo.setForeground(new java.awt.Color(153, 0, 153));
+        titulo.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        titulo.setForeground(new java.awt.Color(0, 204, 204));
         titulo.setText("LA SUERTE DE LOS DADOS");
 
-        dosdados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Dados/pngegg (10).png"))); // NOI18N
+        dosdados.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Dados/ambosdados.png"))); // NOI18N
 
-        lanzamiento1.setForeground(new java.awt.Color(153, 0, 153));
+        lanzamiento1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lanzamiento1.setForeground(new java.awt.Color(0, 204, 204));
         lanzamiento1.setText("Lanzamiento jugador");
 
-        lanzamiento2.setForeground(new java.awt.Color(153, 0, 153));
+        lanzamiento2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lanzamiento2.setForeground(new java.awt.Color(0, 204, 204));
         lanzamiento2.setText("Lanzamiento máquina");
 
+        jugadordado.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jugadordado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Dados/dado.png"))); // NOI18N
         jugadordado.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -101,12 +140,15 @@ public class Dados extends javax.swing.JFrame {
             }
         });
 
+        maquinadado.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         maquinadado.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Dados/dado.png"))); // NOI18N
 
-        suma1.setForeground(new java.awt.Color(153, 0, 153));
+        suma1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        suma1.setForeground(new java.awt.Color(0, 204, 204));
         suma1.setText("Suma total:");
 
-        suma2.setForeground(new java.awt.Color(153, 0, 153));
+        suma2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        suma2.setForeground(new java.awt.Color(0, 204, 204));
         suma2.setText("Suma total:");
 
         retroceder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Dados/return.png"))); // NOI18N
@@ -116,69 +158,170 @@ public class Dados extends javax.swing.JFrame {
             }
         });
 
+        cerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Menu/close.png"))); // NOI18N
+        cerrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cerrarMouseClicked(evt);
+            }
+        });
+
+        money.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Menu/mony2.png"))); // NOI18N
+        money.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                moneyMouseClicked(evt);
+            }
+        });
+
+        cinco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/monedas/monedaza5.png"))); // NOI18N
+        cinco.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cincoMouseClicked(evt);
+            }
+        });
+
+        diez.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/monedas/monedaza10.png"))); // NOI18N
+        diez.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                diezMouseClicked(evt);
+            }
+        });
+
+        veinticinco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/monedas/monedaza25.png"))); // NOI18N
+        veinticinco.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                veinticincoMouseClicked(evt);
+            }
+        });
+
+        setentaycinco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/monedas/moneda75 (2).png"))); // NOI18N
+        setentaycinco.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                setentaycincoMouseClicked(evt);
+            }
+        });
+
+        cien.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/monedas/monedaza100.png"))); // NOI18N
+        cien.setToolTipText("");
+        cien.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cienMouseClicked(evt);
+            }
+        });
+
+        cincuenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/monedas/monedaza50.png"))); // NOI18N
+        cincuenta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cincuentaMouseClicked(evt);
+            }
+        });
+
+        apuest.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                apuestMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(56, 56, 56)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(suma1)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jugadordado)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(37, 37, 37)
-                                .addComponent(lanzamiento1)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 141, Short.MAX_VALUE)
-                        .addComponent(dosdados)
-                        .addGap(37, 37, 37)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(lanzamiento2)
-                        .addGap(88, 88, 88))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(suma2)
-                        .addGap(176, 176, 176))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(maquinadado)
-                        .addGap(73, 73, 73))))
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(retroceder)
-                .addGap(243, 243, 243)
-                .addComponent(titulo)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(retroceder)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(titulo)
+                        .addGap(98, 98, 98)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lanzamiento2)
+                                .addGap(140, 140, 140))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(money)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cerrar)
+                                .addContainerGap())))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(dosdados)
+                        .addGap(75, 75, 75)
+                        .addComponent(maquinadado, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(77, 77, 77))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(84, 84, 84)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lanzamiento1)
+                            .addComponent(suma1)
+                            .addComponent(jugadordado, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cinco)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(diez)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(veinticinco)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cincuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(setentaycinco)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cien))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(180, 180, 180)
+                                .addComponent(apuest, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(168, 168, 168)
+                                .addComponent(suma2)))
+                        .addContainerGap(167, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(retroceder)
-                        .addGap(111, 111, 111)
-                        .addComponent(lanzamiento1)
-                        .addGap(55, 55, 55)
-                        .addComponent(jugadordado))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(138, 138, 138)
-                        .addComponent(lanzamiento2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(maquinadado))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
+                        .addGap(25, 25, 25)
                         .addComponent(titulo)
-                        .addGap(61, 61, 61)
-                        .addComponent(dosdados)))
-                .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(suma1)
-                    .addComponent(suma2))
-                .addContainerGap(340, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(72, 72, 72)
+                                .addComponent(lanzamiento1)
+                                .addGap(18, 18, 18)
+                                .addComponent(jugadordado, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(suma1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 166, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(apuest, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cerrar)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(money))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(retroceder)
+                                .addGap(87, 87, 87)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(dosdados)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(lanzamiento2)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(maquinadado, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(suma2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cinco)
+                    .addComponent(diez)
+                    .addComponent(veinticinco, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(setentaycinco)
+                    .addComponent(cincuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cien))
+                .addGap(85, 85, 85))
         );
 
         pack();
@@ -192,15 +335,112 @@ public class Dados extends javax.swing.JFrame {
 
     private void retrocederMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_retrocederMouseClicked
         // TODO add your handling code here:
-            this.setVisible(false); // Oculta la ventana actual
-    new Menu().setVisible(true); // Crea y muestra el menú principal con el dinero actual
-    this.dispose(); // Libera los recursos de la ventana actual
+        this.setVisible(false); // Oculta la ventana actual
+        new Menu().setVisible(true); // Crea y muestra el menú principal con el dinero actual
+        this.dispose(); // Libera los recursos de la ventana actual
 
 
     }//GEN-LAST:event_retrocederMouseClicked
+
+    private void cerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cerrarMouseClicked
+        // TODO add your handling code here:
+        int result = JOptionPane.showConfirmDialog(this, "¿ESTAS SEGURO?", "SALIR", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            this.dispose();
+        }
+    }//GEN-LAST:event_cerrarMouseClicked
+
+    private void moneyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_moneyMouseClicked
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Tu saldo es de $" + dinerouser);
+    }//GEN-LAST:event_moneyMouseClicked
+
+    private void cincoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cincoMouseClicked
+        // TODO add your handling code here:
+        apostador = Apostar.cinco;
+        apostando();
+    }//GEN-LAST:event_cincoMouseClicked
+
+    private void diezMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diezMouseClicked
+        // TODO add your handling code here:
+        apostador = Apostar.diez;
+        apostando();
+    }//GEN-LAST:event_diezMouseClicked
+
+    private void veinticincoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_veinticincoMouseClicked
+        // TODO add your handling code here:
+        apostador = Apostar.veinticinco;
+        apostando();
+    }//GEN-LAST:event_veinticincoMouseClicked
+
+    private void setentaycincoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_setentaycincoMouseClicked
+        // TODO add your handling code here:
+        apostador = Apostar.setentaycinco;
+        apostando();
+    }//GEN-LAST:event_setentaycincoMouseClicked
+
+    private void cienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cienMouseClicked
+        // TODO add your handling code here:
+        apostador = Apostar.cien;
+        apostando();
+    }//GEN-LAST:event_cienMouseClicked
+
+    private void cincuentaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cincuentaMouseClicked
+        // TODO add your handling code here:
+        apostador = Apostar.cincuenta;
+        apostando();
+    }//GEN-LAST:event_cincuentaMouseClicked
+
+    private void apuestMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_apuestMouseClicked
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Estas apostando " + apuestaenvivo);
+    }//GEN-LAST:event_apuestMouseClicked
+    private void apostando() {
+        int nuevaApuesta = 0;
+
+        switch (apostador) {
+            case cinco:
+                nuevaApuesta = 5;
+                break;
+            case diez:
+                nuevaApuesta = 10;
+                break;
+            case veinticinco:
+                nuevaApuesta = 25;
+                break;
+            case cincuenta:
+                nuevaApuesta = 50;
+                break;
+            case setentaycinco:
+                nuevaApuesta = 75;
+                break;
+            case cien:
+                nuevaApuesta = 100;
+                break;
+        }
+
+        if (apuestaenvivo + nuevaApuesta > comprobaciondinero) {
+            JOptionPane.showMessageDialog(this, "No tienes suficientes fondos para esta apuesta.");
+            return;
+        }
+        apuestaenvivo += nuevaApuesta;
+        apuest.setIcon(imagen2);
+    }
+
+    private void perdidaapuesta() {
+        dinerouser = dinerouser - apuestaenvivo;
+        userdao.actualizarDinero(usuar, dinerouser);
+    }
+
+    private void ganarapuesta() {
+        dinerouser = dinerouser + apuestaenvivo;
+        userdao.actualizarDinero(usuar, dinerouser);
+
+    }
+
     public void jugar() {
-        int dadoJugador = rd.nextInt(6);
-        int dadoMaquina = rd.nextInt(6);
+        int dadoJugador = rd.nextInt(6) + 1;
+        int dadoMaquina = rd.nextInt(6) + 1;
 
         sumajugador = sumajugador + dadoJugador;
         sumamaquina = sumamaquina + dadoMaquina;
@@ -210,33 +450,40 @@ public class Dados extends javax.swing.JFrame {
 
         actualizarDado(jugadordado, dadoJugador);
         actualizarDado(maquinadado, dadoMaquina);
-        if (sumajugador >= 20 & sumamaquina < sumajugador) {
+        if (sumajugador > 20 && sumamaquina < sumajugador) {
             JOptionPane.showMessageDialog(this, "Ha ganado el jugador!");
+            ganarapuesta();
+            apuestaenvivo = 0;
+            apuest.setIcon(null);
+            comprobaciondinero = dinerouser;
             acabar();
         }
-        if (sumamaquina >= 20 & sumamaquina > sumajugador) {
+        if (sumamaquina > 20 && sumamaquina > sumajugador) {
             JOptionPane.showMessageDialog(this, "Ganó la máquina!");
+            perdidaapuesta();
+            apuestaenvivo = 0;
+            apuest.setIcon(null);
+            comprobaciondinero = dinerouser;
             acabar();
         }
-        }
+    }
 
     private void actualizarDado(JLabel label, int dado) {
-        label.setIcon(dados[dado]); // Se usa el array directamente
+        label.setIcon(dados[dado - 1]); // Se usa el array directamente
 
     }
-    private void acabar(){
-        int opcion=JOptionPane.showConfirmDialog(this, "Volver a jugar","Continuar",JOptionPane.YES_NO_OPTION);
-        if (opcion==JOptionPane.YES_OPTION) {
-            suma1.setText("Suma total: ");
-            suma2.setText("Suma total: ");
-            sumajugador=0;
-            sumamaquina=0;
-            JOptionPane.showMessageDialog(this, "A disfrutar!");
-        }else{
-            JOptionPane.showMessageDialog(this, "Adios!");
-            this.dispose();
-        }
+
+    private void acabar() {
+
+        suma1.setText("Suma total: ");
+        suma2.setText("Suma total: ");
+        jugadordado.setIcon(imagen);
+        maquinadado.setIcon(imagen);
+        sumajugador = 0;
+        sumamaquina = 0;
+
     }
+
     /**
      * @param args the command line arguments
      */
@@ -271,30 +518,40 @@ public class Dados extends javax.swing.JFrame {
             }
         });
     }
+
     class FondoPanel extends JPanel {
 
-    private Image imagen;
+        private Image imagen;
 
-    @Override
-    public void paint(Graphics g) {
+        @Override
+        public void paint(Graphics g) {
 
-        imagen = new ImageIcon(getClass().getResource("/Dados/fondodado.jpg")).getImage();
-        g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
+            imagen = new ImageIcon(getClass().getResource("/Dados/fondodado.jpg")).getImage();
+            g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
 
-        setOpaque(false);
+            setOpaque(false);
 
-        super.paint(g);
+            super.paint(g);
+        }
     }
-}
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel apuest;
+    private javax.swing.JLabel cerrar;
+    private javax.swing.JLabel cien;
+    private javax.swing.JLabel cinco;
+    private javax.swing.JLabel cincuenta;
+    private javax.swing.JLabel diez;
     private javax.swing.JLabel dosdados;
     private javax.swing.JLabel jugadordado;
     private javax.swing.JLabel lanzamiento1;
     private javax.swing.JLabel lanzamiento2;
     private javax.swing.JLabel maquinadado;
+    private javax.swing.JLabel money;
     private javax.swing.JLabel retroceder;
+    private javax.swing.JLabel setentaycinco;
     private javax.swing.JLabel suma1;
     private javax.swing.JLabel suma2;
     private javax.swing.JLabel titulo;
+    private javax.swing.JLabel veinticinco;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,12 +1,13 @@
-
 package PPT;
 
 import Menu.Menu;
+import Menu.UsuarioDAO;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.net.URL;
 import java.util.Random;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /*
@@ -17,12 +18,13 @@ import javax.swing.JPanel;
  *
  * @author aazur
  */
-
 public class ppt extends javax.swing.JFrame {
+
     FondoPanel panel = new FondoPanel();
     int contJ = 0;
     int contM = 0;
     String nombreusuario;
+
     enum Resultado {
         Piedra,
         Papel,
@@ -30,22 +32,43 @@ public class ppt extends javax.swing.JFrame {
         Ninguna
     }
     Resultado operacion = Resultado.Ninguna;
-    String jugador = "";
     Random rd = new Random(3);
+    int dinerouser = 0;
+
+    enum Apostar {
+        cinco,
+        diez,
+        veinticinco,
+        cincuenta,
+        setentaycinco,
+        cien,
+        cero
+
+    }
+    private static int comprobaciondinero = 0;
+    Apostar apostador = Apostar.cero;
+    private static int apuestaenvivo = 0;
+    ImageIcon imagen2 = new ImageIcon(getClass().getResource("/Dados/fichicas.png"));
+    private static UsuarioDAO userdao = new UsuarioDAO();
 
     /**
      * Creates new form Parejas
+     *
      * @param usuario
+     * @param dinero
      */
-    public ppt(String usuario,int dinero){
-        
+    public ppt(String usuario, int dinero) {
+
         this.setContentPane(panel);
         initComponents();
-        if (usuario!=null) {
+        if (usuario != null) {
             player.setText(usuario);
         }
-        
+        dinerouser = dinero;
+        comprobaciondinero=dinero;
+        nombreusuario = usuario;
     }
+
     public ppt() {
         this.setContentPane(panel);
         initComponents();
@@ -60,7 +83,6 @@ public class ppt extends javax.swing.JFrame {
         ImageIcon iconopap = new ImageIcon(getClass().getResource("/PPT/papel.png"));
         ImageIcon iconotij = new ImageIcon(getClass().getResource("/PPT/tijeras.png"));
 
-        
         // Asignar imagen según la elección de la máquina
         switch (maquina) {
             case Piedra:
@@ -77,19 +99,30 @@ public class ppt extends javax.swing.JFrame {
         // Determinar el resultado
         if (eleccionJugador == maquina) {
             resultado.setText("Empate");
+            reseteo();
         } else if ((eleccionJugador == Resultado.Piedra && maquina == Resultado.Tijera)
                 || (eleccionJugador == Resultado.Papel && maquina == Resultado.Piedra)
                 || (eleccionJugador == Resultado.Tijera && maquina == Resultado.Papel)) {
             resultado.setText("Gana Jugador");
+            ganarapuesta();
+            reseteo();
             contJ++;
         } else {
             resultado.setText("Gana Máquina");
+            perdidaapuesta();
+            reseteo();
             contM++;
         }
 
         // Actualizar marcador
         victoriasjugador.setText("Victorias Jugador: " + contJ);
         victoriasmaquina.setText("Victorias Máquina: " + contM);
+    }
+
+    private void reseteo() {
+        apuestaenvivo = 0;
+        apuest.setIcon(null);
+        comprobaciondinero = dinerouser;
     }
 
     /**
@@ -113,9 +146,19 @@ public class ppt extends javax.swing.JFrame {
         victoriasmaquina = new javax.swing.JLabel();
         resultado = new javax.swing.JLabel();
         retroceder = new javax.swing.JLabel();
+        cinco = new javax.swing.JLabel();
+        diez = new javax.swing.JLabel();
+        apuest = new javax.swing.JLabel();
+        veinticinco = new javax.swing.JLabel();
+        setentaycinco = new javax.swing.JLabel();
+        cien = new javax.swing.JLabel();
+        cincuenta = new javax.swing.JLabel();
+        cerrar = new javax.swing.JLabel();
+        money = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        setResizable(false);
 
         jugar.setBackground(new java.awt.Color(153, 0, 153));
         jugar.setText("Jugar");
@@ -146,24 +189,27 @@ public class ppt extends javax.swing.JFrame {
             }
         });
 
-        titulo.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        titulo.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         titulo.setForeground(new java.awt.Color(153, 0, 153));
         titulo.setText("PIEDRA-PAPEL-TIJERA");
 
-        player.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        player.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         player.setForeground(new java.awt.Color(153, 0, 153));
         player.setText("Jugador");
 
-        maquina.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        maquina.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         maquina.setForeground(new java.awt.Color(153, 0, 153));
         maquina.setText("Máquina");
 
+        victoriasjugador.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         victoriasjugador.setForeground(new java.awt.Color(153, 0, 153));
         victoriasjugador.setText("Victorias:");
 
+        victoriasmaquina.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         victoriasmaquina.setForeground(new java.awt.Color(153, 0, 153));
         victoriasmaquina.setText("Victorias:");
 
+        resultado.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         resultado.setForeground(new java.awt.Color(153, 0, 153));
         resultado.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         resultado.setText("Resultado:");
@@ -175,82 +221,187 @@ public class ppt extends javax.swing.JFrame {
             }
         });
 
+        cinco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/monedas/monedaza5.png"))); // NOI18N
+        cinco.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cincoMouseClicked(evt);
+            }
+        });
+
+        diez.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/monedas/monedaza10.png"))); // NOI18N
+        diez.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                diezMouseClicked(evt);
+            }
+        });
+
+        apuest.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                apuestMouseClicked(evt);
+            }
+        });
+
+        veinticinco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/monedas/monedaza25.png"))); // NOI18N
+        veinticinco.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                veinticincoMouseClicked(evt);
+            }
+        });
+
+        setentaycinco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/monedas/moneda75 (2).png"))); // NOI18N
+        setentaycinco.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                setentaycincoMouseClicked(evt);
+            }
+        });
+
+        cien.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/monedas/monedaza100.png"))); // NOI18N
+        cien.setToolTipText("");
+        cien.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cienMouseClicked(evt);
+            }
+        });
+
+        cincuenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/blackjack/monedas/monedaza50.png"))); // NOI18N
+        cincuenta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cincuentaMouseClicked(evt);
+            }
+        });
+
+        cerrar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Menu/close.png"))); // NOI18N
+        cerrar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cerrarMouseClicked(evt);
+            }
+        });
+
+        money.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Menu/mony2.png"))); // NOI18N
+        money.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                moneyMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(piedra)
-                    .addComponent(tijera)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(papel))
-                    .addComponent(player)
-                    .addComponent(victoriasjugador, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(140, 140, 140)
-                .addComponent(resultado, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
-                .addGap(169, 169, 169)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(eleccionmaquina, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(maquina)
-                    .addComponent(victoriasmaquina, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(player)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(6, 6, 6)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(victoriasjugador, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(piedra)
+                                            .addComponent(papel)
+                                            .addComponent(tijera))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(40, 40, 40)
+                                        .addComponent(jugar)
+                                        .addGap(0, 193, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(apuest, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(100, 100, 100)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(victoriasmaquina, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(maquina)
+                                    .addComponent(eleccionmaquina, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(retroceder)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(titulo)
+                                .addGap(63, 63, 63)
+                                .addComponent(money)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cerrar))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(129, 129, 129)
+                                .addComponent(resultado, javax.swing.GroupLayout.PREFERRED_SIZE, 522, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(137, 137, 137)
+                                .addComponent(cinco)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(diez)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(veinticinco)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cincuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(setentaycinco)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cien)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(retroceder)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(titulo)
-                        .addGap(272, 272, 272))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jugar)
-                        .addGap(368, 368, 368))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(titulo))
-                    .addComponent(retroceder))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(6, 6, 6)
+                        .addComponent(retroceder)
+                        .addGap(56, 56, 56))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cerrar)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(12, 12, 12)
+                                        .addComponent(money))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(25, 25, 25)
+                                .addComponent(titulo)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(maquina)
+                                .addGap(72, 72, 72)
+                                .addComponent(eleccionmaquina, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(76, 76, 76))
+                            .addComponent(apuest, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(45, 45, 45)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(player)
-                            .addComponent(maquina))
-                        .addContainerGap())
+                            .addComponent(jugar)
+                            .addComponent(victoriasmaquina)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(player)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(48, 48, 48)
-                                .addComponent(papel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(piedra)
-                                .addGap(27, 27, 27))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(95, 95, 95)
-                                .addComponent(eleccionmaquina, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)))
+                                .addComponent(papel)))
+                        .addGap(34, 34, 34)
+                        .addComponent(piedra)
+                        .addGap(54, 54, 54)
                         .addComponent(tijera)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(54, 54, 54)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(victoriasjugador)
-                                    .addComponent(victoriasmaquina))
-                                .addGap(158, 158, 158))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jugar)
-                                .addGap(29, 29, 29)
-                                .addComponent(resultado)
-                                .addGap(147, 147, 147))))))
+                        .addGap(45, 45, 45)
+                        .addComponent(victoriasjugador)))
+                .addGap(18, 18, 18)
+                .addComponent(resultado)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(cinco)
+                    .addComponent(diez)
+                    .addComponent(veinticinco, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(setentaycinco)
+                    .addComponent(cincuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cien))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
 
         pack();
@@ -259,7 +410,7 @@ public class ppt extends javax.swing.JFrame {
 
     private void tijeraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tijeraMouseClicked
         // TODO add your handling code here:
-        operacion = Resultado.Papel;
+        operacion = Resultado.Tijera;
     }//GEN-LAST:event_tijeraMouseClicked
 
     private void piedraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_piedraMouseClicked
@@ -285,74 +436,181 @@ public class ppt extends javax.swing.JFrame {
     private void retrocederMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_retrocederMouseClicked
         // TODO add your handling code here:
 
-    this.setVisible(false); // Oculta la ventana actual
-    new Menu().setVisible(true); // Crea y muestra el menú principal con el dinero actual
-    this.dispose(); // Libera los recursos de la ventana actual
+        this.setVisible(false); // Oculta la ventana actual
+        new Menu().setVisible(true); // Crea y muestra el menú principal con el dinero actual
+        this.dispose(); // Libera los recursos de la ventana actual
 
 
     }//GEN-LAST:event_retrocederMouseClicked
+
+    private void cincoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cincoMouseClicked
+        // TODO add your handling code here:
+        apostador = Apostar.cinco;
+        apostando();
+    }//GEN-LAST:event_cincoMouseClicked
+
+    private void diezMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_diezMouseClicked
+        // TODO add your handling code here:
+        apostador = Apostar.diez;
+        apostando();
+    }//GEN-LAST:event_diezMouseClicked
+
+    private void apuestMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_apuestMouseClicked
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "Estas apostando " + apuestaenvivo);
+    }//GEN-LAST:event_apuestMouseClicked
+
+    private void veinticincoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_veinticincoMouseClicked
+        // TODO add your handling code here:
+        apostador = Apostar.veinticinco;
+        apostando();
+    }//GEN-LAST:event_veinticincoMouseClicked
+
+    private void setentaycincoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_setentaycincoMouseClicked
+        // TODO add your handling code here:
+        apostador = Apostar.setentaycinco;
+        apostando();
+    }//GEN-LAST:event_setentaycincoMouseClicked
+
+    private void cienMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cienMouseClicked
+        // TODO add your handling code here:
+        apostador = Apostar.cien;
+        apostando();
+    }//GEN-LAST:event_cienMouseClicked
+
+    private void cincuentaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cincuentaMouseClicked
+        // TODO add your handling code here:
+        apostador = Apostar.cincuenta;
+        apostando();
+    }//GEN-LAST:event_cincuentaMouseClicked
+
+    private void cerrarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cerrarMouseClicked
+        // TODO add your handling code here:
+        int result = JOptionPane.showConfirmDialog(this, "¿ESTAS SEGURO?", "SALIR", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            this.dispose();
+        }
+    }//GEN-LAST:event_cerrarMouseClicked
+
+    private void moneyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_moneyMouseClicked
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this,"Tu saldo es de $"+dinerouser);
+    }//GEN-LAST:event_moneyMouseClicked
+
+    private void apostando() {
+        int nuevaApuesta = 0;
+
+        switch (apostador) {
+            case cinco:
+                nuevaApuesta = 5;
+                break;
+            case diez:
+                nuevaApuesta = 10;
+                break;
+            case veinticinco:
+                nuevaApuesta = 25;
+                break;
+            case cincuenta:
+                nuevaApuesta = 50;
+                break;
+            case setentaycinco:
+                nuevaApuesta = 75;
+                break;
+            case cien:
+                nuevaApuesta = 100;
+                break;
+        }
+
+        if (apuestaenvivo + nuevaApuesta > comprobaciondinero) {
+            JOptionPane.showMessageDialog(this, "No tienes suficientes fondos para esta apuesta.");
+            return;
+        }
+        apuestaenvivo += nuevaApuesta;
+        apuest.setIcon(imagen2);
+    }
+
+    private void perdidaapuesta() {
+        dinerouser = dinerouser - apuestaenvivo;
+        userdao.actualizarDinero(nombreusuario, dinerouser);
+    }
+
+    private void ganarapuesta() {
+        dinerouser = dinerouser + apuestaenvivo;
+        userdao.actualizarDinero(nombreusuario, dinerouser);
+
+    }
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-    /* Set the Nimbus look and feel */
-    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-     */
-    try {
-        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-            if ("Nimbus".equals(info.getName())) {
-                javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                break;
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
             }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(ppt.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(ppt.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(ppt.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(ppt.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-    } catch (ClassNotFoundException ex) {
-        java.util.logging.Logger.getLogger(ppt.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (InstantiationException ex) {
-        java.util.logging.Logger.getLogger(ppt.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (IllegalAccessException ex) {
-        java.util.logging.Logger.getLogger(ppt.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-        java.util.logging.Logger.getLogger(ppt.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    }
-    //</editor-fold>
-    //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
-    /* Create and display the form */
-    java.awt.EventQueue.invokeLater(new Runnable() {
-        public void run() {
-            new ppt().setVisible(true);
-        }
-    });
-}
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new ppt().setVisible(true);
+            }
+        });
+    }
+
     class FondoPanel extends JPanel {
 
-    private Image imagen;
+        private Image imagen;
 
-    @Override
-    public void paint(Graphics g) {
+        @Override
+        public void paint(Graphics g) {
 
-        imagen = new ImageIcon(getClass().getResource("/PPT/fondoPPT.png")).getImage();
-        g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
+            imagen = new ImageIcon(getClass().getResource("/PPT/fondoPPT.png")).getImage();
+            g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
 
-        setOpaque(false);
+            setOpaque(false);
 
-        super.paint(g);
+            super.paint(g);
+        }
     }
-}
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel apuest;
+    private javax.swing.JLabel cerrar;
+    private javax.swing.JLabel cien;
+    private javax.swing.JLabel cinco;
+    private javax.swing.JLabel cincuenta;
+    private javax.swing.JLabel diez;
     private javax.swing.JLabel eleccionmaquina;
     private javax.swing.JButton jugar;
     private javax.swing.JLabel maquina;
+    private javax.swing.JLabel money;
     private javax.swing.JLabel papel;
     private javax.swing.JLabel piedra;
     private javax.swing.JLabel player;
     private javax.swing.JLabel resultado;
     private javax.swing.JLabel retroceder;
+    private javax.swing.JLabel setentaycinco;
     private javax.swing.JLabel tijera;
     private javax.swing.JLabel titulo;
+    private javax.swing.JLabel veinticinco;
     private javax.swing.JLabel victoriasjugador;
     private javax.swing.JLabel victoriasmaquina;
     // End of variables declaration//GEN-END:variables
